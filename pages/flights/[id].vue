@@ -340,9 +340,9 @@ const submitForApproval = () => {
       </form>
     </div>
   </div>
-  <!-- <div v-else class="no-data">
+  <div v-else class="no-data">
     <p>No flight data available. Please go back to the search page.</p>
-  </div> -->
+  </div>
 </template>
 
 <style scoped>
