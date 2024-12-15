@@ -23,7 +23,6 @@ const user = ref({
   supervisorName: '',
   supervisorEmail: '',
 });
-console.log('process.env.GPT_API_KEY', config.public.GPT_API_KEY);
 // Fetch ChatGPT itinerary
 const fetchItinerary = async (destination, numberOfDays, purpose, aiBudget, aiPurpose) => {
   console.log('purpose', aiBudget, aiPurpose);
@@ -49,7 +48,7 @@ Make it short, fun, and engaging by using emojis instead of list points. Only tw
       },
       {
         headers: {
-          // Authorization: config.public.GPT_API_KEY,
+          Authorization: config.public.GPT_API_KEY,
           'Content-Type': 'application/json',
         },
       }
@@ -93,7 +92,7 @@ onMounted(() => {
   flight.value = flightStore.getFlightById(id);
 
   emailjs.init({
-    // publicKey: config.public.EMAILJS_API_KEY,
+    publicKey: config.public.EMAILJS_API_KEY,
   });
 
   // if (route.query.flight) {
