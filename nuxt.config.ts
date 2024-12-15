@@ -10,5 +10,12 @@ export default defineNuxtConfig({
       GPT_API_KEY: process.env.GPT_API_KEY ?? '',
       EMAILJS_API_KEY: process.env.EMAILJS_API_KEY ?? '',
     }
+  },
+  vite: {
+    build: {
+      rollupOptions: {
+        external: ['@emailjs/browser']
+      }
+    }
   }
 })
