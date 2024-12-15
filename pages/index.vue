@@ -106,7 +106,7 @@ const getRandomCity = () => {
   <div class="landing-page">
     <header>
       <img src="/logo.png" alt="TravelHub Logo" class="logo" />
-      <h3>Business travel, made easy.</h3>
+      <h3 class="slogan">Business travel made easy✈️</h3>
     </header>
     <div class="search-container">
       <form @submit.prevent="searchFlights" class="search-form">
@@ -231,6 +231,9 @@ const getRandomCity = () => {
 }
 .checkbox-input:checked {
   accent-color: #8d1a1a; /* Customize the checkbox color */
+}
+.slogan {
+  color: #8d1a1a; /* Customize the checkbox color */
 }
 .flight-number {
   font-size: 0.8rem;

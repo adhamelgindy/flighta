@@ -7,8 +7,8 @@ export default defineNuxtConfig({
   ],
   runtimeConfig: {
     public: {
-      GPT_API_KEY: process.env.GPT_API_KEY || '',
-      EMAILJS_API_KEY: process.env.EMAILJS_API_KEY || ''
+      GPT_API_KEY: process.env.GPT_API_KEY ?? '',
+      EMAILJS_API_KEY: process.env.EMAILJS_API_KEY ?? ''
     }
   }
 })
