@@ -17,7 +17,7 @@ const passengers = ref(1);
 const budget = ref(0); 
 const showAllResults = ref(false);
 const cities = ref([
-  'Amsterdam', 'Andorra la Vella', 'Luxor', 'Athens', 'Belgrade', 'Berlin',
+  'Amsterdam', 'Andorra la Vella', 'Athens', 'Belgrade', 'Berlin',
   'Bern', 'Bratislava','Hurghada', 'Brussels', 'Bucharest', 'Budapest',
   'Copenhagen', 'Dublin', 'Edinburgh', 'Florence', 'Frankfurt',
   'Genoa', 'Greece', 'Hamburg', 'Helsinki', 'Istanbul',

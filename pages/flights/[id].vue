@@ -35,16 +35,14 @@ const fetchItinerary = async (destination, numberOfDays, purpose, aiBudget, aiPu
         messages: [
           {
             role: 'system',
-            content: `You are a travel planner for Business professionals. Create an itinerary for a trip with the purpose of ${aiPurpose}, using only the places to visit.`,
+            content: `You are a travel planner specializing in creating professional, concise, and visually engaging trip itineraries. Each day should include a morning activity and an afternoon activity, with a short description of each. Use emojis at the start of each line for added visual appeal.`,
           },
           {
             role: 'user',
-            content: `
-Create a ${numberOfDays}-day itinerary of must-visit places, exciting activities, delicious restaurants, top attractions, and iconic landmarks for a trip to ${destination}. The trip is focused on ${aiPurpose}, with a budget of ${aiBudget}. 
-Make it short, fun, and engaging by using emojis instead of list points. Only two activities per day, and do not use day numbers as titles`,
+            content: `Create a ${numberOfDays}-day itinerary for a trip to ${destination}. The purpose of the trip is ${aiPurpose}, with a budget of ${aiBudget}. Each day should include two activities: one in the morning and one in the afternoon. Write the activities in this format: Morning: [Activity description]. Afternoon: [Activity description]. Use emojis at the beginning of each activity to represent the theme. Do not use day numbers as titles, and ensure the tone is fun and engaging.`,
           },
         ],
-        max_tokens: 200,
+        max_tokens: 356,
       },
       {
         headers: {
@@ -73,19 +71,11 @@ const handleTryAI = () => {
       console.log('Purpose:', aiPurpose.value);
       console.log('Budget:', aiBudget.value);
 
-      // if (route.query.flight) {
-    // flight.value = JSON.parse(route.query.flight);
     const destination = flight.value.destination;
     const purpose = flight.value.purpose;
-    const numberOfDays = 3; // 3 days trip
+    const numberOfDays = 3; 
     fetchItinerary(destination, numberOfDays, purpose, aiBudget.value, aiPurpose.value);
-  //   console.log('itinerary', itinerary);
-  // } else {
-  //   console.error('No flight data found in the query parameters.');
-  // }
-      // Add logic to generate or fetch itinerary based on these parameters
     };
-// Parse flight data from route query
 onMounted(() => {
   const id = Number(route.params.id);
   console.log('flightStore.getFlightById(id)', flightStore.getFlightById(id));
@@ -93,25 +83,11 @@ onMounted(() => {
 
   emailjs.init({
     publicKey: config.public.EMAILJS_API_KEY,
-  });
-
-  // if (route.query.flight) {
-    // flight.value = JSON.parse(route.query.flight);
-    // const destination = flight.value.destination;
-    // const purpose = flight.value.purpose;
-    // const numberOfDays = 3; // 3 days trip
-    // fetchItinerary(destination, numberOfDays, purpose, aiBudget.value, aiPurpose.value);
-  // } else {
-  //   console.error('No flight data found in the query parameters.');
-  // }
-  
+  });  
 });
 
-// Send email function (same as your original)
 const sendEmail = async (flight) => {
   const flightObj = flight.value;
-  // https://chatgpt.com/share/674ed3bb-8440-800d-80a9-894aab08731a
-  // console.log('flight', typeof flightObj, flightObj.departure);
   const templateParams = {
     name: user.value.name,
     myEmail: user.value.myEmail,
@@ -131,8 +107,6 @@ const sendEmail = async (flight) => {
     passengers: flightObj.passengers,
   };
 
-  // console.log('templateParams', templateParams);
-
   emailjs
     .send('service_pci6jqd', 'template_ybm0vsd', templateParams)
     .then(() => {
@@ -143,17 +117,13 @@ const sendEmail = async (flight) => {
     });
 };
 
-// Form submission handler
 const submitForApproval = () => {
   sendEmail(flight);
 };
 </script>
 
 <template>
-
   <div class="container" v-if="flight">
-      
-  
     <div class="card">
       <h1 class="title">Flight Details</h1>
       <div class="flight-details-card">
@@ -254,8 +224,6 @@ const submitForApproval = () => {
       <p>Loading itinerary...</p>
     </div>
 
-    <!-- deploy with nelify ?????????????????????????????????????????????????????????ß -->
-    <!-- // edit: https://chatgpt.com/share/675dcdfd-4618-800d-8ad2-e693d97212a8 -->
     <div v-else class="itinerary-cards">
       <div v-for="(day, index) in itinerary" :key="index" class="card">
         <div class="edit-icon-container">
