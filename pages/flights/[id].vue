@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router';
 import axios from 'axios';
 import emailjs from '@emailjs/browser';
 import { useFlightStore } from '~/stores/flightStore';
+import draggable from 'vuedraggable';
 
 const config = useRuntimeConfig()
 const route = useRoute();
@@ -14,6 +15,9 @@ const itinerary = ref([]);
 const loadingItinerary = ref(false);
 const aiPurpose = ref('');
 const aiBudget = ref('');
+const cityImage1 = ref('');
+const cityImage2 = ref('');
+const cityImage3 = ref('');
 
 const user = ref({
   name: '',
@@ -77,9 +81,28 @@ const handleTryAI = () => {
     fetchItinerary(destination, numberOfDays, purpose, aiBudget.value, aiPurpose.value);
     };
 onMounted(() => {
+  // flight.value = flightStore.currentState();
   const id = Number(route.params.id);
   console.log('flightStore.getFlightById(id)', flightStore.getFlightById(id));
   flight.value = flightStore.getFlightById(id);
+
+//   for (let i = 0; i < 2; i++) {
+//     fetchRandomCityImage(flight.value.destination).then((imageUrl) => {
+//   cityImagei+1.value = imageUrl
+// });sdaA
+//   }
+
+// fetchRandomCityImage(flight.value.destination).then((imageUrl) => {
+//   cityImage1.value = imageUrl
+// });
+
+// fetchRandomCityImage(flight.value.destination).then((imageUrl) => {
+//   cityImage2.value = imageUrl
+// });
+
+// fetchRandomCityImage(flight.value.destination).then((imageUrl) => {
+//   cityImage3.value = imageUrl
+// });
 
   emailjs.init({
     publicKey: config.public.EMAILJS_API_KEY,
@@ -120,6 +143,17 @@ const sendEmail = async (flight) => {
 const submitForApproval = () => {
   sendEmail(flight);
 };
+
+// const fetchRandomCityImage = async (cityName) => {
+//   const accessKey = 'nMKBOkZSX9EQCHE4IsZkS7v2T_TZYjq8am_WPefRGZg'; 
+//   const url = `https://api.unsplash.com/photos/random?query=${cityName}+landmarks&client_id=${accessKey}&count=1`;
+
+//   const response = await fetch(url);
+//   const data = await response.json();
+  
+//   return data[0]?.urls?.regular;
+// };
+
 </script>
 
 <template>
@@ -195,11 +229,14 @@ const submitForApproval = () => {
     </div>
 
     <div class="tripHeader">
-      <img :src="`/trip${Math.floor(Math.random() * 6) + 1}.png`" alt="Trip photo" class="tripImage" />
+      <!-- <img :src="cityImage1" alt="Trip photo" class="tripImage" />
+      <img :src="cityImage2" alt="Trip photo" class="tripImage" />
+      <img :src="cityImage3" alt="Trip photo" class="tripImage" /> -->
       <img :src="`/trip${Math.floor(Math.random() * 6) + 7}.png`" alt="Trip photo" class="tripImage" />
       <img :src="`/trip${Math.floor(Math.random() * 6) + 13}.png`" alt="Trip photo" class="tripImage" />
       <img :src="`/trip${Math.floor(Math.random() * 6) + 1}.png`" alt="Trip photo" class="tripImage" />
       <img :src="`/trip${Math.floor(Math.random() * 6) + 7}.png`" alt="Trip photo" class="tripImage" />
+      <img :src="`/trip${Math.floor(Math.random() * 6) + 13}.png`" alt="Trip photo" class="tripImage" />
       <img :src="`/trip${Math.floor(Math.random() * 6) + 13}.png`" alt="Trip photo" class="tripImage" />
     </div>    
 
@@ -222,7 +259,34 @@ const submitForApproval = () => {
     <div v-if="loadingItinerary" class="card">
       <h2 class="subtitle">Itinerary</h2>
       <p>Loading itinerary...</p>
-    </div>
+    </div>  
+    
+    <!-- <div v-else>
+      <draggable
+        v-model="itinerary"
+        class="list-group itinerary-draggable"
+        ghost-class="ghost"
+        :animation="200"
+        @start="dragging = true"
+        @end="dragging = false"
+      >
+        <template #item="{ element: day, index }">
+          <div class="card">
+            <div class="edit-icon-container">
+              <img src="/editIcon.png" alt="Edit Icon" class="edit-icon" />
+            </div>
+            <h3>Day {{ index + 1 }}</h3>
+            <ul>
+              <li v-for="(activity, i) in day" :key="i">
+                <p>{{ activity }}</p>
+              </li>
+            </ul>
+          </div>
+        </template>
+      </draggable>
+    </div> -->
+    
+    
 
     <div v-else class="itinerary-cards">
       <div v-for="(day, index) in itinerary" :key="index" class="card">
@@ -615,5 +679,54 @@ const submitForApproval = () => {
   background-color: #a51212;
 }
 
+.itinerary-draggable {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 0;
+  list-style: none;
+}
 
+.itinerary-draggable .card {
+  flex: 1 1 calc(33.33% - 16px); /* Adjusted width for a 3-column layout with gaps */
+  max-width: calc(33.33% - 16px);
+  border: 1px solid #510909;
+  border-radius: 8px;
+  padding: 16px;
+  background: linear-gradient(135deg, #fff, #fff);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  color: #510909;
+  text-align:start;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: grab;
+}
+
+
+
+.itinerary-draggable .card:hover {
+  cursor: grabbing;
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.itinerary-draggable .edit-icon-container img {
+  width: 24px;
+  height: 24px;
+}
+
+
+.itinerary-draggable ul {
+  padding: 0;
+  list-style: none;
+}
+
+.itinerary-draggable li {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.itinerary-cards .card p {
+  margin-bottom: 15px; /* Separate paragraphs with some space */
+}
 </style>

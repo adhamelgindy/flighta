@@ -19,7 +19,7 @@ const showAllResults = ref(false);
 const cities = ref([
   'Amsterdam', 'Andorra la Vella', 'Athens', 'Belgrade', 'Berlin',
   'Bern', 'Bratislava','Hurghada', 'Brussels', 'Bucharest', 'Budapest',
-  'Copenhagen', 'Dublin', 'Edinburgh', 'Florence', 'Frankfurt',
+  'Copenhagen', 'Cairo', 'Luxor', 'Dublin', 'Edinburgh', 'Florence', 'Frankfurt',
   'Genoa', 'Greece', 'Hamburg', 'Helsinki', 'Istanbul',
   'Kiev', 'Lisbon', 'Ljubljana', 'London', 'Luxembourg City',
   'Malta', 'Madrid', 'Marseille', 'Milan', 'Monaco',
@@ -35,14 +35,14 @@ const cities = ref([
   'Riga', 'Salzburg', 'Sofia', 'Stavanger', 'Stockholm',
   'Tampere', 'Thessaloniki', 'Turin', 'Utrecht', 'Valencia',
   'Vitoria-Gasteiz', 'Wroclaw', 'Zaragoza', 'Graz', 'Pécs',
-  'La Rochelle', 'Antalya', 'Szeged', 'Dijon', 'Bordeaux'
+  'La Rochelle', 'Antalya', 'Szeged', 'Dijon', 'Bordeaux','Tehran', 'Ahvaz'
 ]);
-const travelPurposes = ref([
-  'Meetings', 'Conference', 'Client Visit', 'Team Building', 'Training', // Business
-  'Vacation', 'Adventure', 'Relaxation', 'Cultural Exploration', 'Family Visit' // Leisure
-]);
+// const travelPurposes = ref([
+//   'Meetings', 'Conference', 'Client Visit', 'Team Building', 'Training', // Business
+//   'Vacation', 'Adventure', 'Relaxation', 'Cultural Exploration', 'Family Visit' // Leisure
+// ]);
 const Purpose = ref('');
-const Budget = ref(['Low', 'Medium', 'High']);
+// const Budget = ref(['Low', 'Medium', 'High']);
 
 
 // Methods
