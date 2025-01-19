@@ -77,32 +77,41 @@ const handleTryAI = () => {
 
     const destination = flight.value.destination;
     const purpose = flight.value.purpose;
-    const numberOfDays = 3; 
-    fetchItinerary(destination, numberOfDays, purpose, aiBudget.value, aiPurpose.value);
+
+  const depDateStr = flight.value.departureDate; 
+  const reDateStr = flight.value.returnDate;
+
+const depDate = new Date(depDateStr);
+const reDate = new Date(reDateStr);
+const Difference_In_Time = reDate.getTime() - depDate.getTime();
+const Difference_In_Days = Math.round(Difference_In_Time / (1000 * 3600 * 24));
+
+    fetchItinerary(destination, Difference_In_Days, purpose, aiBudget.value, aiPurpose.value);
     };
 onMounted(() => {
-  // flight.value = flightStore.currentState();
   const id = Number(route.params.id);
   console.log('flightStore.getFlightById(id)', flightStore.getFlightById(id));
   flight.value = flightStore.getFlightById(id);
+  // const savedFlightData = getFlightDataFromLocalStorage();
 
-//   for (let i = 0; i < 2; i++) {
-//     fetchRandomCityImage(flight.value.destination).then((imageUrl) => {
-//   cityImagei+1.value = imageUrl
-// });sdaA
-//   }
+  // if (savedFlightData) {
+  //   flight.value = savedFlightData;
+  // } else {
+  //   flight.value = flightStore.getFlightById(id);
+  //   saveFlightDataToLocalStorage(flight.value);
+  // }
 
-// fetchRandomCityImage(flight.value.destination).then((imageUrl) => {
-//   cityImage1.value = imageUrl
-// });
+  fetchRandomCityImage(flight.value.destination).then((imageUrl) => {
+  cityImage1.value = imageUrl
+});
 
-// fetchRandomCityImage(flight.value.destination).then((imageUrl) => {
-//   cityImage2.value = imageUrl
-// });
+fetchRandomCityImage(flight.value.destination).then((imageUrl) => {
+  cityImage2.value = imageUrl
+});
 
-// fetchRandomCityImage(flight.value.destination).then((imageUrl) => {
-//   cityImage3.value = imageUrl
-// });
+fetchRandomCityImage(flight.value.destination).then((imageUrl) => {
+  cityImage3.value = imageUrl
+});
 
   emailjs.init({
     publicKey: config.public.EMAILJS_API_KEY,
@@ -144,20 +153,90 @@ const submitForApproval = () => {
   sendEmail(flight);
 };
 
-// const fetchRandomCityImage = async (cityName) => {
-//   const accessKey = 'nMKBOkZSX9EQCHE4IsZkS7v2T_TZYjq8am_WPefRGZg'; 
-//   const url = `https://api.unsplash.com/photos/random?query=${cityName}+landmarks&client_id=${accessKey}&count=1`;
+const fetchRandomCityImage = async (cityName) => {
+  const accessKey = 'nMKBOkZSX9EQCHE4IsZkS7v2T_TZYjq8am_WPefRGZg'; 
+  const url = `https://api.unsplash.com/photos/random?query=${cityName}+landmarks&client_id=${accessKey}&count=1`;
 
-//   const response = await fetch(url);
-//   const data = await response.json();
+  const response = await fetch(url);
+  const data = await response.json();
   
-//   return data[0]?.urls?.regular;
-// };
+  return data[0]?.urls?.regular;
+};
+
+
+
+const saveFlightDataToLocalStorage = (flightData) => {
+  try {
+    // Convert flight data to JSON string
+    const flightDataJSON = JSON.stringify(flightData);
+    // Save to localStorage
+    localStorage.setItem('flightData', flightDataJSON);
+  } catch (error) {
+    console.error('Error saving flight data:', error);
+  }
+};
+
+const getFlightDataFromLocalStorage = () => {
+  try {
+    const flightDataJSON = localStorage.getItem('flightData');
+    return flightDataJSON ? JSON.parse(flightDataJSON) : null;
+  } catch (error) {
+    console.error('Error retrieving flight data:', error);
+    return null;
+  }
+};
+const savedFlightData = getFlightDataFromLocalStorage();
+console.log("kosomak ya local storage!!!!!!!!!",savedFlightData);
+
+
+const API_KEY = '35e08841-e010-4acd-95de-ae29d3aa0c59:fx'; // Replace with your actual API key
+const URL = 'https://api-free.deepl.com/v2/translate'; // Use the correct endpoint for your plan
+
+const translatePage = async (languageCode) => {
+  try {
+    // Extract the page's text content
+    const pageText = document.documentElement.innerText;
+
+    // Make the translation request
+    const response = await axios.post(URL, null, {
+      params: {
+        auth_key: API_KEY,
+        text: pageText,
+        source_lang: 'EN', // Source language
+        target_lang: 'JA', // Target language
+      },
+    });
+
+    console.log('Translation Response:', response);
+
+    // Apply the translated text to the page
+    const translatedText = response.data.translations[0].text;
+
+    // Replace the page's text with the translated content
+    document.documentElement.innerHTML = translatedText;
+  } catch (error) {
+    console.error('Error translating page:', error.response?.data || error.message);
+  }
+};
 
 </script>
 
 <template>
   <div class="container" v-if="flight">
+    <div class="header-tabs">
+      <div class="tab" @click="tab = 'status'"><NuxtLink to="/status/trip" class="tab" style="text-decoration: none; color: #ffffff;">
+        👀Trip Status
+      </NuxtLink></div>
+      <div class="language-dropdown">
+        <select v-model="selectedLanguage" @change="translatePage(selectedLanguage)">
+          <option value="en">English</option>
+          <option value="de">German</option>
+          <option value="fr">French</option>
+          <option value="es">Spanish</option>
+          <option value="ja">Japanese</option>
+        </select>
+      </div>
+    </div>
     <div class="card">
       <h1 class="title">Flight Details</h1>
       <div class="flight-details-card">
@@ -229,16 +308,10 @@ const submitForApproval = () => {
     </div>
 
     <div class="tripHeader">
-      <!-- <img :src="cityImage1" alt="Trip photo" class="tripImage" />
+      <img :src="cityImage1" alt="Trip photo" class="tripImage" />
       <img :src="cityImage2" alt="Trip photo" class="tripImage" />
-      <img :src="cityImage3" alt="Trip photo" class="tripImage" /> -->
-      <img :src="`/trip${Math.floor(Math.random() * 6) + 7}.png`" alt="Trip photo" class="tripImage" />
-      <img :src="`/trip${Math.floor(Math.random() * 6) + 13}.png`" alt="Trip photo" class="tripImage" />
-      <img :src="`/trip${Math.floor(Math.random() * 6) + 1}.png`" alt="Trip photo" class="tripImage" />
-      <img :src="`/trip${Math.floor(Math.random() * 6) + 7}.png`" alt="Trip photo" class="tripImage" />
-      <img :src="`/trip${Math.floor(Math.random() * 6) + 13}.png`" alt="Trip photo" class="tripImage" />
-      <img :src="`/trip${Math.floor(Math.random() * 6) + 13}.png`" alt="Trip photo" class="tripImage" />
-    </div>    
+      <img :src="cityImage3" alt="Trip photo" class="tripImage" />
+    </div> 
 
     <div class="try-ai-card">
       <h2>Plan with AI</h2>
@@ -261,7 +334,7 @@ const submitForApproval = () => {
       <p>Loading itinerary...</p>
     </div>  
     
-    <!-- <div v-else>
+    <div v-else>
       <draggable
         v-model="itinerary"
         class="list-group itinerary-draggable"
@@ -284,20 +357,6 @@ const submitForApproval = () => {
           </div>
         </template>
       </draggable>
-    </div> -->
-    
-    
-
-    <div v-else class="itinerary-cards">
-      <div v-for="(day, index) in itinerary" :key="index" class="card">
-        <div class="edit-icon-container">
-          <img src="/editIcon.png" alt="Edit Icon" class="edit-icon" />
-        </div>
-        <h3>Day {{ index + 1 }}</h3>
-        <ul>
-          <li v-for="(activity, i) in day" :key="i">{{ activity }}</li>
-        </ul>
-      </div>
     </div>
 
       <iframe 
@@ -373,7 +432,7 @@ const submitForApproval = () => {
     </div>
   </div>
   <div v-else class="no-data">
-    <p>No flight data available. Please go back to the search page.</p>
+    <p>No flight data available. Please wait.</p>
   </div>
 </template>
 
@@ -728,5 +787,72 @@ const submitForApproval = () => {
 
 .itinerary-cards .card p {
   margin-bottom: 15px; /* Separate paragraphs with some space */
+}
+
+.header-tabs {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.tab {
+  background-color: #510909;
+  color: #ffffff;
+  padding: 10px 5px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.tab:hover {
+  background-color: #3d0707;
+}
+
+.no-data {
+  text-align: center;
+  font-size: 18px;
+  color: #510909;
+}
+
+.card {
+  margin-bottom: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card .subtitle {
+  color: #510909;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.submit-btn {
+  background-color: #510909;
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #3d0707;
+}
+
+.language-dropdown {
+  margin-bottom: 20px;
+}
+
+select {
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #932525;
 }
 </style>

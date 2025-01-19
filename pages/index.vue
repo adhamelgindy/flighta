@@ -1,4 +1,3 @@
-
 <script setup>
 import { ref, computed } from 'vue';
 import { faker } from '@faker-js/faker';
@@ -17,7 +16,7 @@ const passengers = ref(1);
 const budget = ref(0); 
 const showAllResults = ref(false);
 const cities = ref([
-  'Amsterdam', 'Andorra la Vella', 'Athens', 'Belgrade', 'Berlin',
+  'Amsterdam',"Barcelona", 'Andorra la Vella', 'Athens', 'Belgrade', 'Berlin',
   'Bern', 'Bratislava','Hurghada', 'Brussels', 'Bucharest', 'Budapest',
   'Copenhagen', 'Cairo', 'Luxor', 'Dublin', 'Edinburgh', 'Florence', 'Frankfurt',
   'Genoa', 'Greece', 'Hamburg', 'Helsinki', 'Istanbul',
@@ -99,7 +98,7 @@ const getRandomCity = () => {
     };
     // Function to determine if the connecting city should be shown
     const shouldShowConnectingCity = (index) => {
-      return Math.random() < 0.5; // 50% chance
+      return Math.random() < 0.3; // 50% chance
     };
 </script>
 <template>
