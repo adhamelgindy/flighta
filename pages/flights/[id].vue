@@ -92,14 +92,23 @@ onMounted(() => {
   const id = Number(route.params.id);
   console.log('flightStore.getFlightById(id)', flightStore.getFlightById(id));
   flight.value = flightStore.getFlightById(id);
-  // const savedFlightData = getFlightDataFromLocalStorage();
+  let savedFlightData
+  if (flightStore.getFlightById(id)) {
+    savedFlightData = flightStore.getFlightById(id);
+    saveFlightDataToLocalStorage(savedFlightData)
+  } else {
+    savedFlightData = getFlightDataFromLocalStorage();
+    saveFlightDataToLocalStorage(savedFlightData)
+  }
+  console.log('savedFlightDataXXXXXX', savedFlightData);
 
-  // if (savedFlightData) {
-  //   flight.value = savedFlightData;
-  // } else {
-  //   flight.value = flightStore.getFlightById(id);
-  //   saveFlightDataToLocalStorage(flight.value);
-  // }
+  if (savedFlightData) {
+    flight.value = savedFlightData;
+  } else {
+    console.log('flightStore.getFlightById(id)', flightStore.getFlightById(id));
+    flight.value = flightStore.getFlightById(id);
+    saveFlightDataToLocalStorage(flight.value);
+  }
 
   fetchRandomCityImage(flight.value.destination).then((imageUrl) => {
   cityImage1.value = imageUrl
@@ -185,8 +194,8 @@ const getFlightDataFromLocalStorage = () => {
     return null;
   }
 };
-const savedFlightData = getFlightDataFromLocalStorage();
-console.log("kosomak ya local storage!!!!!!!!!",savedFlightData);
+// const savedFlightData = getFlightDataFromLocalStorage();
+// console.log("kosomak ya local storage!!!!!!!!!",savedFlightData);
 
 
 const API_KEY = '35e08841-e010-4acd-95de-ae29d3aa0c59:fx'; // Replace with your actual API key

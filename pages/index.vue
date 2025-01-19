@@ -16,11 +16,11 @@ const passengers = ref(1);
 const budget = ref(0); 
 const showAllResults = ref(false);
 const cities = ref([
-  'Amsterdam',"Barcelona", 'Andorra la Vella', 'Athens', 'Belgrade', 'Berlin',
-  'Bern', 'Bratislava','Hurghada', 'Brussels', 'Bucharest', 'Budapest',
-  'Copenhagen', 'Cairo', 'Luxor', 'Dublin', 'Edinburgh', 'Florence', 'Frankfurt',
-  'Genoa', 'Greece', 'Hamburg', 'Helsinki', 'Istanbul',
-  'Kiev', 'Lisbon', 'Ljubljana', 'London', 'Luxembourg City',
+  // 'Amsterdam',"Barcelona", 'Andorra la Vella', 'Athens', 'Belgrade', 'Berlin',
+  // 'Bern', 'Bratislava','Hurghada', 'Brussels', 'Bucharest', 'Budapest',
+  // 'Copenhagen', 'Cairo', 'Luxor', 'Dublin', 'Edinburgh', 'Florence', 'Frankfurt',
+  // 'Genoa', 'Greece', 'Hamburg', 'Helsinki', 'Istanbul',
+  // 'Kiev', 'Lisbon', 'Ljubljana', 'London', 'Luxembourg City',
   'Malta', 'Madrid', 'Marseille', 'Milan', 'Monaco',
   'Munich', 'Naples', 'Oslo', 'Paris', 'Prague',
   'Riga', 'Rome', 'Rotterdam', 'San Marino', 'Sarajevo',
