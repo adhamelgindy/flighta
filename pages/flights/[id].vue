@@ -236,7 +236,7 @@ const translatePage = async (languageCode) => {
       <div class="tab" @click="tab = 'status'"><NuxtLink to="/status/trip" class="tab" style="text-decoration: none; color: #ffffff;">
         👀Trip Status
       </NuxtLink></div>
-      <div class="language-dropdown">
+      <!-- <div class="language-dropdown">
         <select v-model="selectedLanguage" @change="translatePage(selectedLanguage)">
           <option value="en">English</option>
           <option value="de">German</option>
@@ -244,7 +244,7 @@ const translatePage = async (languageCode) => {
           <option value="es">Spanish</option>
           <option value="ja">Japanese</option>
         </select>
-      </div>
+      </div> -->
     </div>
     <div class="card">
       <h1 class="title">Flight Details</h1>
@@ -388,12 +388,12 @@ const translatePage = async (languageCode) => {
   <div class="card" style="padding: 20px; background-color: #510909; border-radius: 8px; font-size: 16px; color: #ffffff; font-weight: bold; cursor: not-allowed;" title="Feature locked">
     🔒 Lodging style
   </div>   
-  <div class="card" style="padding: 20px; background-color: #510909; border-radius: 8px; font-size: 16px; color: #ffffff; font-weight: bold; cursor: not-allowed;" title="Feature locked">
+  <!-- <div class="card" style="padding: 20px; background-color: #510909; border-radius: 8px; font-size: 16px; color: #ffffff; font-weight: bold; cursor: not-allowed;" title="Feature locked">
     🔒 One day trips 
   </div> 
   <div class="card" style="padding: 20px; background-color: #510909; border-radius: 8px; font-size: 16px; color: #ffffff; font-weight: bold; cursor: not-allowed;" title="Feature locked">
     🔒 Restaurants in the area 
-  </div> 
+  </div>  -->
 </div>
 
     <div class="card">
@@ -440,8 +440,9 @@ const translatePage = async (languageCode) => {
       </form>
     </div>
   </div>
-  <div v-else class="no-data">
-    <p>No flight data available. Please wait.</p>
+  <div class="loading-spinner" v-else>
+    <div class="spinner"></div>
+    <!-- <p>No flight data found.</p> -->
   </div>
 </template>
 
@@ -863,5 +864,30 @@ select {
   padding: 5px;
   border-radius: 4px;
   border: 1px solid #932525;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+
+.spinner {
+  border: 4px solid #f3f3f3; /* Light gray */
+  border-top: 4px solid #510909; /* Purple */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

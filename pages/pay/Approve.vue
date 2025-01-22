@@ -14,38 +14,59 @@ export default {
       cvv: "",
     });
 
-    const config = useRuntimeConfig()
+    const flightData = ref(null); // Reactive reference to store flight data
 
-    // Initialize EmailJS when the component is mounted
+    const config = useRuntimeConfig();
+
+    // Fetch flight data from localStorage
+    const getFlightDataFromLocalStorage = () => {
+      try {
+        const flightDataJSON = localStorage.getItem("flightData");
+        return flightDataJSON ? JSON.parse(flightDataJSON) : null;
+      } catch (error) {
+        console.error("Error retrieving flight data:", error);
+        return null;
+      }
+    };
+
+    const saveFlightDataToLocalStorage = (flightData) => {
+  try {
+    // Convert flight data to JSON string
+    const flightDataJSON = JSON.stringify(flightData);
+    // Save to localStorage
+    localStorage.setItem('flightData', flightDataJSON);
+  } catch (error) {
+    console.error('Error saving flight data:', error);
+  }
+};
+
+    // Initialize EmailJS and fetch flight data on mount
     onMounted(() => {
-      emailjs.init({
-        publicKey: config.public.EMAILJS_API_KEY,
-      });
+      flightData.value = getFlightDataFromLocalStorage(); // Assign flight data
+      // emailjs.init({
+      //   publicKey: config.public.EMAILJS_API_KEY,
+      // });
     });
 
     // Method for processing payment
     const processPayment = async () => {
-      if (!email.value) {
-        alert("Please enter your email address.");
+      const flight = getFlightDataFromLocalStorage();
+
+      if (!flight) {
+        console.error("No flight data available for processing payment.");
+        alert("No flight data found.");
         return;
       }
 
-      console.log("email", email.value);
+      console.log("Original Flight Data:", flight);
 
-      const templateParams = {
-        to_email: 'adham.elgindy99@gmail.com',
-      };
+      // Update the flight status to "accepted"
+      flight.status = "accepted";
 
-      console.log("Sending email...");
+      // Save the updated flight data to localStorage
+      saveFlightDataToLocalStorage(flight);
 
-      try {
-       emailjs.send("service_pci6jqd", "template_4hfcz8a", templateParams);
-       alert("Thank you! Your payment has been successfully completed💸.");
-        // window.location.href = "http://localhost:3000";
-      } catch (error) {
-        alert("Error occurred!", error);
-        console.error("Error sending email:", error);
-      }
+      window.location.href = "http://localhost:3000/status/trip";
     };
 
     // Return everything to make it available in the template
@@ -55,78 +76,78 @@ export default {
       email,
       creditCardDetails,
       processPayment,
+      flightData, // Expose flight data to the template
     };
   },
 };
 </script>
 
 <template>
-    <div class="payment-page">
-      <h1>Payment</h1>
-      <p class="payment-instructions">
-        Please review the payment details and proceed to complete your booking.
-      </p>
-  
-      <div class="payment-summary">
-        <h2>Order Summary</h2>
-        <p>Total Price: €<strong>{{ totalPrice }}</strong></p>
+  <div class="payment-page">
+    <h1>Payment</h1>
+    <p class="payment-instructions">
+      Please review the payment details and proceed to complete your booking.
+    </p>
+
+    <div class="payment-summary">
+      <div v-if="flightData">
+      <h2>Order Summary</h2>
+      <p>Total Price: €<strong>{{ flightData.price }}</strong></p>
+      <h3>Flight Details</h3>
+      <!-- Display flight data -->
+        <p style="font-size: 14px;">Destination: {{ flightData.destination }}</p>
+        <p style="font-size: 14px;">From: {{ flightData.departureDate }}</p>
+        <p style="font-size: 14px;">To:{{ flightData.returnDate }}</p>
       </div>
-  
-      <form @submit.prevent="processPayment">
-        <div class="payment-method">
-          <label for="email">Email Address:</label>
-          <input
-            class="payment_label"
-            type="email"
-            id="email"
-            v-model="email"
-            placeholder="Enter your email address"
-            required
-          />
-        </div>
-  
-        <div class="payment-method">
-          <label for="payment-method">Select Payment Method:</label>
-          <select id="payment-method" v-model="paymentMethod">
-            <option value="bank-transfer">Bank Transfer</option>
-            <option value="credit-card">Credit Card</option>
-            <option value="paypal">PayPal</option>
-          </select>
-        </div>
-  
-        <!-- Conditionally render credit card details if 'credit-card' is selected -->
-        <div class="credit-card-details" v-if="paymentMethod === 'credit-card'">
-          <h3>Credit Card Details</h3>
-          <label for="card-number">Card Number:</label>
-          <input
-            type="text"
-            id="card-number"
-            v-model="creditCardDetails.cardNumber"
-            placeholder="Enter card number"
-            required
-          />
-          <label for="expiry-date">Expiry Date:</label>
-          <input
-            type="text"
-            id="expiry-date"
-            v-model="creditCardDetails.expiryDate"
-            placeholder="MM/YY"
-            required
-          />
-          <label for="cvv">CVV:</label>
-          <input
-            type="text"
-            id="cvv"
-            v-model="creditCardDetails.cvv"
-            placeholder="123"
-            required
-          />
-        </div>
-  
-        <button type="submit" class="pay-now-btn">Pay Now</button>
-      </form>
+      <div class="loading-spinner" v-else>
+        <div class="spinner"></div>
+        <!-- <p>No flight data found.</p> -->
+      </div>
     </div>
-  </template>
+
+    <form @submit.prevent="processPayment">
+      <div class="payment-method">
+        <label for="payment-method">Select Payment Method:</label>
+        <select id="payment-method" v-model="paymentMethod">
+          <option value="bank-transfer">Bank Transfer</option>
+          <option value="credit-card">Credit Card</option>
+          <option value="paypal">PayPal</option>
+        </select>
+      </div>
+
+      <!-- Conditionally render credit card details if 'credit-card' is selected -->
+      <div class="credit-card-details" v-if="paymentMethod === 'credit-card'">
+        <h3>Credit Card Details</h3>
+        <label for="card-number">Card Number:</label>
+        <input
+          type="text"
+          id="card-number"
+          v-model="creditCardDetails.cardNumber"
+          placeholder="Enter card number"
+          required
+        />
+        <label for="expiry-date">Expiry Date:</label>
+        <input
+          type="text"
+          id="expiry-date"
+          v-model="creditCardDetails.expiryDate"
+          placeholder="MM/YY"
+          required
+        />
+        <label for="cvv">CVV:</label>
+        <input
+          type="text"
+          id="cvv"
+          v-model="creditCardDetails.cvv"
+          placeholder="123"
+          required
+        />
+      </div>
+
+      <button type="submit" class="pay-now-btn">Pay Now</button>
+    </form>
+  </div>
+</template>
     
   
   <style scoped>
@@ -223,6 +244,31 @@ export default {
   
   .pay-now-btn:hover {
     background-color: #a51212;
+  }
+
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+  }
+  
+  .spinner {
+    border: 4px solid #f3f3f3; /* Light gray */
+    border-top: 4px solid #510909; /* Purple */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
   </style>
   

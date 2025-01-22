@@ -57,7 +57,8 @@ const searchFlights = () => {
     returnDate: returnDate.value,
     price: faker.finance.amount(50, 400, 1),
     passengers: passengers.value,
-    purpose: Purpose.value // Ensure consistent naming conventions
+    purpose: Purpose.value,
+    status: ""
   });
 
   // Clear existing flights
