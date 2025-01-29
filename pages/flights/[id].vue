@@ -63,6 +63,11 @@ const fetchItinerary = async (destination, numberOfDays, purpose, aiBudget, aiPu
     itinerary.value = Array.from({ length: numberOfDays }, (_, i) => {
       return activities.slice(i * days, (i + 1) * days);
     });
+    const itineraryJSONData = JSON.stringify(itinerary.value);
+    // Save to localStorage
+    // console.log('itinerary.value', itinerary.value);
+    localStorage.setItem('itineraryData', itineraryJSONData);
+    // console.log('lc', localStorage.getItem('itineraryData'));
   } catch (error) {
     console.error('Error fetching itinerary:', error);
     itinerary.value = 'Failed to generate itinerary. Please try again later.';
@@ -71,7 +76,7 @@ const fetchItinerary = async (destination, numberOfDays, purpose, aiBudget, aiPu
   }
 };
 
-const handleTryAI = () => {
+const handleTryAI = async () => {
       console.log('Purpose:', aiPurpose.value);
       console.log('Budget:', aiBudget.value);
 
@@ -194,12 +199,10 @@ const getFlightDataFromLocalStorage = () => {
     return null;
   }
 };
-// const savedFlightData = getFlightDataFromLocalStorage();
-// console.log("kosomak ya local storage!!!!!!!!!",savedFlightData);
 
 
-const API_KEY = '35e08841-e010-4acd-95de-ae29d3aa0c59:fx'; // Replace with your actual API key
-const URL = 'https://api-free.deepl.com/v2/translate'; // Use the correct endpoint for your plan
+const API_KEY = '35e08841-e010-4acd-95de-ae29d3aa0c59:fx'; 
+const URL = 'https://api-free.deepl.com/v2/translate'; 
 
 const translatePage = async (languageCode) => {
   try {
@@ -228,29 +231,6 @@ const translatePage = async (languageCode) => {
   }
 };
 
-// const getRandomCoordinates = (cityLat, cityLng, radius = 1000) => {
-//   const getRandomOffset = () => Math.random() * 2 - 1; // Random number between -1 and 1
-//   const offsetLat = (getRandomOffset() * radius) / 111320; // Latitude offset in meters
-//   const offsetLng = (getRandomOffset() * radius) / (111320 * Math.cos(cityLat * (Math.PI / 180))); // Longitude offset
-//   return { lat: cityLat + offsetLat, lng: cityLng + offsetLng };
-// };
-
-// const getGoogleStaticMapUrl = (centerLat, centerLng, pins, apiKey) => {
-//   const markers = pins.map(({ lat, lng }) => `&markers=${lat},${lng}`).join('');
-//   return `https://maps.googleapis.com/maps/api/staticmap?center=${centerLat},${centerLng}&zoom=13&size=600x400${markers}&key=${apiKey}`;
-// };
-
-// const cityCenter = { lat: 52.5200, lng: 13.4050 }; // Example for Berlin
-// const randomPins = Array.from({ length: 5 }, () =>
-//   getRandomCoordinates(cityCenter.lat, cityCenter.lng)
-// );
-// const staticMapUrl = getGoogleStaticMapUrl(
-//   cityCenter.lat,
-//   cityCenter.lng,
-//   randomPins,
-//   'AIzaSyBiFjp4wVTaSWZ_SFUrNhzKvXFnrfHMbEk'
-// );
-
 const addCustomMarker = () => {
   var map = new google.maps.Map(document.getElementById('gmap_canvas'), {
           center: { lat: this.city.lat, lng: this.city.lng },
@@ -274,15 +254,6 @@ const addCustomMarker = () => {
       <div class="tab" @click="tab = 'status'"><NuxtLink to="/status/trip" class="tab" style="text-decoration: none; color: #ffffff;">
         👀Trip Status
       </NuxtLink></div>
-      <!-- <div class="language-dropdown">
-        <select v-model="selectedLanguage" @change="translatePage(selectedLanguage)">
-          <option value="en">English</option>
-          <option value="de">German</option>
-          <option value="fr">French</option>
-          <option value="es">Spanish</option>
-          <option value="ja">Japanese</option>
-        </select>
-      </div> -->
     </div>
     <div class="card">
       <h1 class="title">Flight Details</h1>
@@ -405,36 +376,6 @@ const addCustomMarker = () => {
         </template>
       </draggable>
     </div>
-    <!-- <img :src="staticMapUrl" alt="Map with pins" style="
-    width: 100%; 
-    height: auto; 
-    border: none; 
-    border-radius: 16px; 
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
-    margin: 20px 0; 
-    overflow: hidden; 
-    transition: all 0.3s ease;
-"/> -->
-
-      <!-- <iframe 
-    style="
-        width: 100%; 
-        height: 300px; 
-        border: none; 
-        border-radius: 16px; 
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
-        margin: 20px 0; 
-        overflow: hidden; 
-        transition: all 0.3s ease;
-    "
-    title="noMap" 
-    id="gmap_canvas" 
-    :src="`https://maps.google.com/maps?width=520&amp;height=400&amp;hl=en&amp;q=%20${flight.destination}+()&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed`"
-    onmouseover="this.style.boxShadow='0 6px 12px rgba(0,0,0,0.2)'"
-    onmouseout="this.style.boxShadow='0 4px 6px rgba(0,0,0,0.1)'"
-    onfocus="this.style.boxShadow='0 6px 12px rgba(0,0,0,0.2)'"
-    onblur="this.style.boxShadow='0 4px 6px rgba(0,0,0,0.1)'"
-></iframe> -->
 <iframe 
     style="
         width: 100%; 
@@ -460,12 +401,6 @@ const addCustomMarker = () => {
   <div class="card" style="padding: 20px; background-color: #510909; border-radius: 8px; font-size: 16px; color: #ffffff; font-weight: bold; cursor: not-allowed;" title="Feature locked">
     🔒 Lodging style
   </div>   
-  <!-- <div class="card" style="padding: 20px; background-color: #510909; border-radius: 8px; font-size: 16px; color: #ffffff; font-weight: bold; cursor: not-allowed;" title="Feature locked">
-    🔒 One day trips 
-  </div> 
-  <div class="card" style="padding: 20px; background-color: #510909; border-radius: 8px; font-size: 16px; color: #ffffff; font-weight: bold; cursor: not-allowed;" title="Feature locked">
-    🔒 Restaurants in the area 
-  </div>  -->
 </div>
 
     <div class="card">

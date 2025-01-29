@@ -3,6 +3,7 @@ import { ref, computed } from 'vue';
 import { faker } from '@faker-js/faker';
 import { useFlightStore } from '~/stores/flightStore';
 
+
 const flightStore = useFlightStore();
 // State variables
 const flights = ref([]);
