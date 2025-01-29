@@ -228,6 +228,44 @@ const translatePage = async (languageCode) => {
   }
 };
 
+// const getRandomCoordinates = (cityLat, cityLng, radius = 1000) => {
+//   const getRandomOffset = () => Math.random() * 2 - 1; // Random number between -1 and 1
+//   const offsetLat = (getRandomOffset() * radius) / 111320; // Latitude offset in meters
+//   const offsetLng = (getRandomOffset() * radius) / (111320 * Math.cos(cityLat * (Math.PI / 180))); // Longitude offset
+//   return { lat: cityLat + offsetLat, lng: cityLng + offsetLng };
+// };
+
+// const getGoogleStaticMapUrl = (centerLat, centerLng, pins, apiKey) => {
+//   const markers = pins.map(({ lat, lng }) => `&markers=${lat},${lng}`).join('');
+//   return `https://maps.googleapis.com/maps/api/staticmap?center=${centerLat},${centerLng}&zoom=13&size=600x400${markers}&key=${apiKey}`;
+// };
+
+// const cityCenter = { lat: 52.5200, lng: 13.4050 }; // Example for Berlin
+// const randomPins = Array.from({ length: 5 }, () =>
+//   getRandomCoordinates(cityCenter.lat, cityCenter.lng)
+// );
+// const staticMapUrl = getGoogleStaticMapUrl(
+//   cityCenter.lat,
+//   cityCenter.lng,
+//   randomPins,
+//   'AIzaSyBiFjp4wVTaSWZ_SFUrNhzKvXFnrfHMbEk'
+// );
+
+const addCustomMarker = () => {
+  var map = new google.maps.Map(document.getElementById('gmap_canvas'), {
+          center: { lat: this.city.lat, lng: this.city.lng },
+          zoom: 12
+      });
+
+      // Custom marker example
+      var marker = new google.maps.Marker({
+          position: { lat: this.city.lat, lng: this.city.lng },
+          map: map,
+          title: 'Custom Marker'
+      });
+    };
+  
+
 </script>
 
 <template>
@@ -317,9 +355,9 @@ const translatePage = async (languageCode) => {
     </div>
 
     <div class="tripHeader">
-      <img :src="cityImage1" alt="Trip photo" class="tripImage" />
-      <img :src="cityImage2" alt="Trip photo" class="tripImage" />
-      <img :src="cityImage3" alt="Trip photo" class="tripImage" />
+      <img :src="cityImage1" alt="Trip1" class="tripImage" />
+      <img :src="cityImage2" alt="Trip2" class="tripImage" />
+      <img :src="cityImage3" alt="Trip3" class="tripImage" />
     </div> 
 
     <div class="try-ai-card">
@@ -367,8 +405,18 @@ const translatePage = async (languageCode) => {
         </template>
       </draggable>
     </div>
+    <!-- <img :src="staticMapUrl" alt="Map with pins" style="
+    width: 100%; 
+    height: auto; 
+    border: none; 
+    border-radius: 16px; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+    margin: 20px 0; 
+    overflow: hidden; 
+    transition: all 0.3s ease;
+"/> -->
 
-      <iframe 
+      <!-- <iframe 
     style="
         width: 100%; 
         height: 300px; 
@@ -379,10 +427,34 @@ const translatePage = async (languageCode) => {
         overflow: hidden; 
         transition: all 0.3s ease;
     "
-    scrolling="no" 
+    title="noMap" 
     id="gmap_canvas" 
     :src="`https://maps.google.com/maps?width=520&amp;height=400&amp;hl=en&amp;q=%20${flight.destination}+()&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed`"
+    onmouseover="this.style.boxShadow='0 6px 12px rgba(0,0,0,0.2)'"
+    onmouseout="this.style.boxShadow='0 4px 6px rgba(0,0,0,0.1)'"
+    onfocus="this.style.boxShadow='0 6px 12px rgba(0,0,0,0.2)'"
+    onblur="this.style.boxShadow='0 4px 6px rgba(0,0,0,0.1)'"
+></iframe> -->
+<iframe 
+    style="
+        width: 100%; 
+        height: 400px; 
+        border: none; 
+        border-radius: 16px; 
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+        margin: 20px 0; 
+        overflow: hidden; 
+        transition: all 0.3s ease-in-out;
+    "
+    title="InteractiveMapWithPins" 
+    id="gmap_canvas" 
+    :src="`https://maps.google.com/maps?width=520&amp;height=400&amp;hl=en&amp;q=%20${flight.destination}+()&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed`"
+    async 
+    defer 
+    crossorigin="anonymous"
+    @load="addCustomMarker"
 ></iframe>
+
 
 <div class="card"> 
   <div class="card" style="padding: 20px; background-color: #510909; border-radius: 8px; font-size: 16px; color: #ffffff; font-weight: bold; cursor: not-allowed;" title="Feature locked">

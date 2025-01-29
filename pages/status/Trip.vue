@@ -45,10 +45,10 @@
             <label>Destination</label>
             <p>{{ flightData?.destination || 'N/A' }}</p>
           </div>
-          <div class="detail-item">
+          <!-- <div class="detail-item">
             <label>Departure</label>
             <p>{{ formatDate(flightData?.departureDate) }}</p>
-          </div>
+          </div> -->
           <div class="detail-item">
             <label>Time Until Departure</label>
             <p>{{ getTimeUntilDeparture() }}</p>
