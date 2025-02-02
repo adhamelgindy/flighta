@@ -16,31 +16,39 @@ const destinationAirport = ref('');
 const passengers = ref(1);
 const budget = ref(0); 
 const showAllResults = ref(false);
-const cities = ref([
-  'Amsterdam', 'Andorra la Vella', 'Athens', 'Belgrade', 'Berlin','Barcelona',
-  'Bern', 'Bratislava','Hurghada', 'Brussels', 'Bucharest', 'Budapest',
-  'Copenhagen', 'Cairo', 'Luxor', 'Dublin', 'Edinburgh', 'Florence', 'Frankfurt',
-  'Genoa', 'Greece', 'Hamburg', 'Helsinki', 'Istanbul',
-  'Kiev', 'Lisbon', 'Ljubljana', 'London', 'Luxembourg City',
-  'Malta', 'Madrid', 'Marseille', 'Milan', 'Monaco',
-  'Munich', 'Naples', 'Oslo', 'Paris', 'Prague',
-  'Riga', 'Rome', 'Rotterdam', 'San Marino', 'Sarajevo',
-  'Stockholm', 'Sofia', 'Stuttgart', 'Tallinn', 'Tbilisi',
-  'Thessaloniki', 'Tirana', 'Toulouse', 'Vienna', 'Vilnius',
-  'Warsaw', 'Zagreb', 'Zurich', 'Antwerp', 'Bergen',
-  'Brno', 'Catania', 'Dortmund', 'Durres', 'Eindhoven',
-  'Gdansk', 'Glasgow', 'Gothenburg', 'Hannover', 'Helsingborg',
-  'Krakow', 'Lille', 'Lviv', 'Maribor', 'Montpellier',
-  'Nantes', 'Nuremberg', 'Osijek', 'Ostrava', 'Pilsen',
-  'Riga', 'Salzburg', 'Sofia', 'Stavanger', 'Stockholm',
-  'Tampere', 'Thessaloniki', 'Turin', 'Utrecht', 'Valencia',
-  'Vitoria-Gasteiz', 'Wroclaw', 'Zaragoza', 'Graz', 'Pécs',
-  'La Rochelle', 'Antalya', 'Szeged', 'Dijon', 'Bordeaux','Tehran', 'Ahvaz'
-]);
-// const travelPurposes = ref([
-//   'Meetings', 'Conference', 'Client Visit', 'Team Building', 'Training', // Business
-//   'Vacation', 'Adventure', 'Relaxation', 'Cultural Exploration', 'Family Visit' // Leisure
+// const cities = ref([
+//   'Amsterdam', 'Andorra la Vella', 'Athens', 'Belgrade', 'Berlin','Barcelona',
+//   'Bern', 'Bratislava','Hurghada', 'Brussels', 'Bucharest', 'Budapest',
+//   'Copenhagen', 'Cairo', 'Luxor', 'Dublin', 'Edinburgh', 'Florence', 'Frankfurt',
+//   'Genoa', 'Greece', 'Hamburg', 'Helsinki', 'Istanbul',
+//   'Kiev', 'Lisbon', 'Ljubljana', 'London', 'Luxembourg City',
+//   'Malta', 'Madrid', 'Marseille', 'Milan', 'Monaco',
+//   'Munich', 'Naples', 'Oslo', 'Paris', 'Prague',
+//   'Riga', 'Rome', 'Rotterdam', 'San Marino', 'Sarajevo',
+//   'Stockholm', 'Sofia', 'Stuttgart', 'Tallinn', 'Tbilisi',
+//   'Thessaloniki', 'Tirana', 'Toulouse', 'Vienna', 'Vilnius',
+//   'Warsaw', 'Zagreb', 'Zurich', 'Antwerp', 'Bergen',
+//   'Brno', 'Catania', 'Dortmund', 'Durres', 'Eindhoven',
+//   'Gdansk', 'Glasgow', 'Gothenburg', 'Hannover', 'Helsingborg',
+//   'Krakow', 'Lille', 'Lviv', 'Maribor', 'Montpellier',
+//   'Nantes', 'Nuremberg', 'Osijek', 'Ostrava', 'Pilsen',
+//   'Riga', 'Salzburg', 'Sofia', 'Stavanger', 'Stockholm',
+//   'Tampere', 'Thessaloniki', 'Turin', 'Utrecht', 'Valencia',
+//   'Vitoria-Gasteiz', 'Wroclaw', 'Zaragoza', 'Graz', 'Pécs',
+//   'La Rochelle', 'Antalya', 'Szeged', 'Dijon', 'Bordeaux','Tehran', 'Ahvaz'
 // ]);
+
+const cities = ref([
+  'AMS', 'ALV', 'ATH', 'BEG', 'BER', 'BCN', 'BRN', 'BTS', 'HRG', 'BRU', 'OTP', 'BUD',
+  'CPH', 'CAI', 'LXR', 'DUB', 'EDI', 'FLR', 'FRA', 'GOA', 'ATH', 'HAM', 'HEL', 'IST',
+  'KBP', 'LIS', 'LJU', 'LHR', 'LUX', 'MLA', 'MAD', 'MRS', 'MXP', 'NCE', 'MUC', 'NAP',
+  'OSL', 'CDG', 'PRG', 'RIX', 'FCO', 'RTM', 'RMI', 'SJJ', 'ARN', 'SOF', 'STR', 'TLL',
+  'TBS', 'SKG', 'TIA', 'TLS', 'VIE', 'VNO', 'WAW', 'ZAG', 'ZRH', 'ANR', 'BGO', 'BRQ',
+  'CTA', 'DTM', 'TIA', 'EIN', 'GDN', 'GLA', 'GOT', 'HAJ', 'AGH', 'KRK', 'LIL', 'LWO',
+  'MBX', 'MPL', 'NTE', 'NUE', 'OSI', 'OSR', 'PLZ', 'SZG', 'SVG', 'TMP', 'TRN', 'UTR',
+  'VLC', 'VIT', 'WRO', 'ZAZ', 'GRZ', 'PEV', 'LRH', 'AYT', 'SZG', 'DIJ', 'BOD', 'IKA', 'AWZ'
+]);
+
 const Purpose = ref('');
 // const Budget = ref(['Low', 'Medium', 'High']);
 

@@ -16,6 +16,9 @@
             <p>All arrangements have been confirmed. You're ready for your journey!</p>
           </div>
         </div>
+        <div v-if="flightData?.status === 'accepted'" class="barcode">
+          <img src="/Barcode.png" alt="Barcode">
+        </div>
 
         <div v-else-if="flightData?.status === 'declined'" class="status-icon">
           <span class="icon">❌</span>
@@ -63,8 +66,10 @@
             <div v-if="formattedItinerary?.length" style="display: flex; flex-wrap: wrap; gap: 16px; justify-content: center;">
               <div v-for="(day, index) in formattedItinerary" :key="index" 
                    style="background: #fff; padding: 16px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 250px; flex: 1 1 calc(33.333% - 16px); min-width: 200px;">
-                <h3 style="margin-bottom: 8px; color: #333; cursor: pointer;" @click="day.expanded = !day.expanded">Day {{ index + 1 }}</h3>
-                <ul v-show="day.expanded" style="list-style: none; padding: 0; margin: 0;">
+                <h3 style="margin-bottom: 8px; color: #333; cursor: pointer;" @click="toggleExpand(index)">
+                  Day {{ index + 1 }} ⮟
+                </h3>
+                <ul v-show="expandedDays[index]" style="list-style: none; padding: 0; margin: 0;">
                   <li v-for="(activity, i) in day" :key="i" 
                       style="padding: 8px 0; border-bottom: 1px solid #eee; color: #555;">
                     {{ activity }}
@@ -75,9 +80,6 @@
             <p v-else style="color: #888; font-style: italic; text-align: center;">No trip plan available</p>            
           </div>
         </div>
-      </div>
-      <div v-if="flightData?.status === 'accepted'" class="barcode">
-        <img src="/Barcode.png" alt="Barcode">
       </div>
     </div>
   </div>
@@ -91,7 +93,8 @@ export default {
       mouseY: 0,
       flightData: null,
       refreshing: false,
-      itinerary: ''
+      itinerary: '',
+      expandedDays: {}
     };
   },
   computed: {
@@ -112,6 +115,9 @@ export default {
     //   this.mouseX = (event.clientX - rect.left) / rect.width;
     //   this.mouseY = (event.clientY - rect.top) / rect.height;
     // },
+    toggleExpand(index) {
+  this.expandedDays = { ...this.expandedDays, [index]: !this.expandedDays[index] };
+},
     formatDate(dateStr) {
       if (!dateStr) return 'N/A';
       return new Date(dateStr).toLocaleDateString('en-US', {
