@@ -61,28 +61,30 @@
             <p>{{ getTimeUntilDeparture() }}</p>
           </div>
           <!-- <br> -->
-          <div class="detail-item">
-            <label>Trip Plan</label>
-            <div v-if="formattedItinerary?.length" style="display: flex; flex-wrap: wrap; gap: 16px; justify-content: center;">
-              <div v-for="(day, index) in formattedItinerary" :key="index" 
-                   style="background: #fff; padding: 16px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 250px; flex: 1 1 calc(33.333% - 16px); min-width: 200px;">
-                <h3 style="margin-bottom: 8px; color: #333; cursor: pointer;" @click="toggleExpand(index)">
-                  Day {{ index + 1 }} ⮟
-                </h3>
-                <ul v-show="expandedDays[index]" style="list-style: none; padding: 0; margin: 0;">
-                  <li v-for="(activity, i) in day" :key="i" 
-                      style="padding: 8px 0; border-bottom: 1px solid #eee; color: #555;">
-                    {{ activity }}
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <p v-else style="color: #888; font-style: italic; text-align: center;">No trip plan available</p>            
-          </div>
+          
         </div>
       </div>
     </div>
   </div>
+  <!-- <div class="ticket-container" @mousemove="handleMouseMove"> -->
+    <div class="detail-item">
+      <div v-if="formattedItinerary?.length" style="display: flex; flex-wrap: wrap; gap: 16px; justify-content: center;">
+        <div v-for="(day, index) in formattedItinerary" :key="index" 
+             style="background: #fff; padding: 16px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 250px; flex: 1 1 calc(33.333% - 16px); min-width: 200px;">
+          <h3 style="margin-bottom: 8px; color: #333; cursor: pointer;" @click="toggleExpand(index)">
+            Day {{ index + 1 }} ⮟
+          </h3>
+          <ul v-show="expandedDays[index]" style="list-style: none; padding: 0; margin: 0; width: 100%">
+            <li v-for="(activity, i) in day" :key="i" 
+                style="padding: 8px 0; border-bottom: 1px solid #eee; color: #555; width: 100%">
+              {{ activity }}
+            </li>
+          </ul>
+        </div>
+      </div>
+      <p v-else style="color: #888; font-style: italic; text-align: center;">No trip plan available</p>            
+    </div>
+  <!-- </div> -->
 </template>
 
 <script>
